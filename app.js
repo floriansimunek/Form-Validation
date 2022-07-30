@@ -8,18 +8,22 @@ const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@
 // password
 const password = document.querySelector("#password");
 const passwordConfirm = document.querySelector("#passwordConfirm");
+// password regex
+// prettier-ignore
+const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 // submit
 const submit = document.querySelector("#submit");
 
 /** isEmailValid
- * check if user email is valid - not empty or null - correct format - emails match
+ * check if user email is valid - not empty or null - correct format - email inputs match
  * e.g "florian.simunek@gmail.com"
  * @param {HTMLElement} element - email input
  */
 function isEmailValid(element) {
+  // TODO: display multiple errors
   // check if email is not empty or null
-  if (element.value === "" || element.value === null) {
+  if (isInputEmpty(element)) {
     setErrorFor(element, "Your email is empty");
   }
   // check if emails match
@@ -33,6 +37,31 @@ function isEmailValid(element) {
     // if no errors : success
     setSuccessFor(element);
   }
+}
+
+/** isPasswordValid
+ * check if user password is valid - not empty or null - correct format - password inpus match
+ * e.g "Password0!"
+ * @param {HTMLElement} element - password input
+ */
+function isPasswordValid(element) {
+  if (isInputEmpty(element)) {
+    setErrorFor(element, "Your password is empty");
+  } else if (password.value != passwordConfirm.value) {
+    setErrorFor(element, "Your password does not match");
+  } else if (!element.value.match(passwordRegex)) {
+    setErrorFor(element, "Your password is not correct\n-Minimum 8 characters\n-One uppercase letter\n-One lowercase letter\n-One Number\n-One special character");
+  } else {
+    setSuccessFor(element);
+  }
+}
+
+/** isInputEmpty
+ * return true if the user input is empty
+ * @param {string} input.value
+ */
+function isInputEmpty(input) {
+  return !input.value || input.value === "" || input.value === null;
 }
 
 /** setErrorFor
@@ -61,6 +90,8 @@ function setSuccessFor(element) {
 }
 
 /** errorsDisplay
+ * display the error message below the invalid input
+ * e.g "test@gm" : "Your email is not correct - example@test.com"
  * @param {HTMLElement} element - input
  * @param {string} message - error
  * @param {bool} append - need to create error element
@@ -81,11 +112,16 @@ function errorsDisplay(element, message = "", append = false) {
   }
 }
 
+// check all user inputs when the form is submitted
 submit.addEventListener("click", (e) => {
   // prevent form submission
   e.preventDefault();
 
-  // check if email is valid
+  // check if email inputs are valid
   isEmailValid(email);
   isEmailValid(emailConfirm);
+
+  // check if password inputs are valid
+  isPasswordValid(password);
+  isPasswordValid(passwordConfirm);
 });
