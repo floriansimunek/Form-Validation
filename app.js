@@ -109,6 +109,7 @@ function errorsDisplay(element, message = "", append = false) {
   small.innerHTML = "";
   if (append) {
     small.appendChild(li);
+    small.hidden = false;
   }
 }
 
