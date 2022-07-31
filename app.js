@@ -21,7 +21,6 @@ const submit = document.querySelector("#submit");
  * @param {HTMLElement} element - email input
  */
 function isEmailValid(element) {
-  // TODO: display multiple errors
   // check if email is not empty or null
   if (isInputEmpty(element)) {
     setErrorFor(element, "Your email is empty");
@@ -45,13 +44,19 @@ function isEmailValid(element) {
  * @param {HTMLElement} element - password input
  */
 function isPasswordValid(element) {
+  // check if password is not empty or null
   if (isInputEmpty(element)) {
     setErrorFor(element, "Your password is empty");
-  } else if (password.value != passwordConfirm.value) {
+  }
+  // check if passwords match
+  else if (password.value != passwordConfirm.value) {
     setErrorFor(element, "Your password does not match");
-  } else if (!element.value.match(passwordRegex)) {
+  }
+  // check if password is correct
+  else if (!element.value.match(passwordRegex)) {
     setErrorFor(element, "Your password is not correct\n-Minimum 8 characters\n-One uppercase letter\n-One lowercase letter\n-One Number\n-One special character");
   } else {
+    // if no errors : success
     setSuccessFor(element);
   }
 }
